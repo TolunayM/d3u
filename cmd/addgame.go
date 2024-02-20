@@ -29,6 +29,7 @@ var addgameCmd = &cobra.Command{
 
 		gameDirectory := filepath.Dir(absolutePath)
 		gameName := filepath.Base(absolutePath)
+		gameName = gameName[0 : len(gameName)-4]
 		bboltconnection.Dbinit(gameName, gameDirectory)
 		fmt.Println("Game directory added to bboltconnection", gameDirectory, gameName)
 	},
