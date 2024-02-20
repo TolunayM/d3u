@@ -19,6 +19,10 @@ var updateCmd = &cobra.Command{
 	Long:  `Update dlss`,
 	Run: func(cmd *cobra.Command, args []string) {
 
+		version, _ := cmd.Flags().GetString("version")
+		//gameSelection,_ := cmd.Flags().GetString("game")
+
+		downloadLink := "https://github.com/TolunayM/dlss-repo/releases/download/" + version + "/nvngx_dlss.dll"
 		db, err := bolt.Open("my.bboltconnection", 0600, nil)
 		if err != nil {
 			log.Fatal(err)
@@ -30,7 +34,7 @@ var updateCmd = &cobra.Command{
 		download := exec.Command(
 			"curl",
 			"-OL",
-			"https://github.com/TolunayM/dlss-repo/releases/download/3.5.0/nvngx_dlss.dll")
+			downloadLink)
 		_, err = download.Output()
 
 		if err != nil {
@@ -87,5 +91,8 @@ var updateCmd = &cobra.Command{
 }
 
 func init() {
+
+	updateCmd.Flags().StringP("version", "v", "latest", "Version specifier")
+	//updateCmd.Flags().StringP("game","g","","Game selection for updating specific games")
 	rootCmd.AddCommand(updateCmd)
 }
