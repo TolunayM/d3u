@@ -23,10 +23,10 @@ func Dbinit(gameName string, gameDirectory string) {
 	})
 	defer db.Close()
 
+	//TODO create distinct add func
 	db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("MyBucket"))
 		err := b.Put([]byte(gameName), []byte(gameDirectory))
-
 		if err != nil {
 			return fmt.Errorf("transaction: %s", err)
 		}
@@ -36,7 +36,6 @@ func Dbinit(gameName string, gameDirectory string) {
 }
 
 // TODO fix
-// if there are no games added to db, infinite loop occur
 func GetGames() {
 
 	db, err := bolt.Open("my.bboltconnection", 0600, nil)
@@ -49,6 +48,8 @@ func GetGames() {
 		b := tx.Bucket([]byte("MyBucket"))
 		c := b.Cursor()
 		for key, value := c.First(); key != nil; key, value = c.Next() {
+
+			//fmt.Println(c)
 			fmt.Printf("Game = %s, location = %s\n", string(key), string(value))
 		}
 
