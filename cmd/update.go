@@ -41,28 +41,7 @@ var updateCmd = &cobra.Command{
 			_ = fmt.Errorf("Something happened %s", err)
 		}
 
-		//request, _ := http.NewRequest("GET", "https://github.com/TolunayM/dlss-repo/releases/download/3.5.10/nvngx_dlss.dll", nil)
-		//response, _ := http.DefaultClient.Do(request)
-		//
-		//defer func(Body io.ReadCloser) {
-		//	err := Body.Close()
-		//	if err != nil {
-		//		fmt.Println(err)
-		//	}
-		//}(response.Body)
-		//
-		//f, _ := os.OpenFile("nvngx_dlss_3.5.10.dll", os.O_CREATE|os.O_WRONLY, 0644)
-		//defer f.Close()
-		//
-		//bar := progressbar.DefaultBytes(
-		//	response.ContentLength,
-		//	"Downloading",
-		//)
-		//
-		//io.Copy(io.MultiWriter(f, bar), response.Body)
-
 		file, err := os.ReadFile("nvngx_dlss.dll")
-
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -70,27 +49,27 @@ var updateCmd = &cobra.Command{
 		db.View(func(tx *bolt.Tx) error {
 			b := tx.Bucket([]byte("MyBucket"))
 			c := b.Cursor()
-			for key, value := c.First(); key != nil; key, value = c.Next() {
 
+			for key, value := c.First(); key != nil; key, value = c.Next() {
 				if gameSelection != "" {
-					fmt.Println(gameSelection + " Updated Successfully")
+
+					fmt.Println(gameSelection + " Updated to " + version + " Successfully")
 					err = os.WriteFile(string(b.Get([]byte(gameSelection)))+"\\nvngx_dlss.dll", file, 0644)
+
 					return nil
+
 				} else {
-					fmt.Println(string(key) + " Updated Successfully")
+
+					fmt.Println(string(key) + " Updated to " + version + " Successfully")
 					err = os.WriteFile(string(value)+"\\nvngx_dlss.dll", file, 0644)
+
 				}
 
 				if err != nil {
 					fmt.Println(err)
 				}
-				//err := os.Rename("path", string(value)+"\\nvngx_dlss.dll")
-				//
-				//if err != nil {
-				//	fmt.Println(err)
-				//}
-			}
 
+			}
 			return nil
 		})
 
