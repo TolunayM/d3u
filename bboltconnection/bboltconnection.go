@@ -8,10 +8,11 @@ import (
 )
 
 var home, _ = os.UserHomeDir()
+var d3uHomeDB = home + "\\d3u\\db"
 
 func Addgame(gameName string, gameDirectory string) {
 
-	db, err := bolt.Open(home+"\\my.bboltconnection", 0600, nil)
+	db, err := bolt.Open(d3uHomeDB+"\\my.bboltconnection", 0600, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -38,7 +39,7 @@ func Addgame(gameName string, gameDirectory string) {
 
 func GetGames() {
 
-	db, err := bolt.Open(home+"\\my.bboltconnection", 0600, nil)
+	db, err := bolt.Open(d3uHomeDB+"\\my.bboltconnection", 0600, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
