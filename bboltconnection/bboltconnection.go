@@ -1,6 +1,7 @@
 package bboltconnection
 
 import (
+	"d3u/tools"
 	"fmt"
 	"github.com/boltdb/bolt"
 	"log"
@@ -51,7 +52,7 @@ func GetGames() {
 
 		for key, value := c.First(); key != nil; key, value = c.Next() {
 
-			fmt.Printf("Game = %s, location = %s\n", string(key), string(value))
+			fmt.Printf("Game = %s, location = %s dlss version = %s\n", string(key), string(value), tools.CheckDlssVersion(string(b.Get(key))))
 		}
 		return nil
 	})
