@@ -1,14 +1,12 @@
 package cmd
 
 import (
+	"d3u/tools"
 	"fmt"
 	"github.com/boltdb/bolt"
 	"github.com/spf13/cobra"
 	"log"
 	"os"
-	"os/exec"
-	"strings"
-	"syscall"
 )
 
 // updateCmd represents the update command
@@ -44,10 +42,9 @@ var updateCmd = &cobra.Command{
 		file, err := os.ReadFile(customDLL)
 		if err != nil {
 			fmt.Println("Dlss files is not present locally download starting...")
-			downloadDLSS(version)
+			tools.DownloadDLSS(version)
 			file, _ = os.ReadFile(customDLL)
 		}
-
 		// updating
 		db.View(func(tx *bolt.Tx) error {
 			b := tx.Bucket([]byte("MyBucket"))
@@ -56,7 +53,7 @@ var updateCmd = &cobra.Command{
 			if len(args) != 0 {
 				for cursor := 0; cursor < len(args); cursor++ {
 					if string(b.Get([]byte(args[cursor]))) != "" {
-						if checkDlssVersion(string(b.Get([]byte(args[cursor])))) != version {
+						if tools.CheckDlssVersion(string(b.Get([]byte(args[cursor])))) != version {
 							err = os.WriteFile(string(b.Get([]byte(args[cursor])))+"\\nvngx_dlss.dll", file, 0644)
 							fmt.Println(args[cursor] + " Updated to " + version + " Successfully")
 						} else {
@@ -73,8 +70,12 @@ var updateCmd = &cobra.Command{
 
 				for key, value := c.First(); key != nil; key, value = c.Next() {
 
-					fmt.Println(string(key) + " Updated to " + version + " Successfully")
-					err = os.WriteFile(string(value)+"\\nvngx_dlss.dll", file, 0644)
+					if tools.CheckDlssVersion(string(b.Get(key))) != version {
+						fmt.Println(string(key) + " Updated to " + version + " Successfully")
+						err = os.WriteFile(string(value)+"\\nvngx_dlss.dll", file, 0644)
+					} else {
+						fmt.Println(string(key) + " already has " + version + " no need to update")
+					}
 
 					if err != nil {
 						fmt.Println(err)
@@ -93,62 +94,4 @@ func init() {
 
 	updateCmd.Flags().StringP("version", "v", "latest", "Version specifier")
 	rootCmd.AddCommand(updateCmd)
-}
-
-func downloadDLSS(version string) {
-
-	downloadLink := "https://github.com/TolunayM/dlss-repo/releases/download/" + version + "/nvngx_dlss.dll"
-	customDLL := d3uHomeDLSS + "\\nvngx_dlss_" + version + ".dll"
-
-	fmt.Println("Downloading dlss files.\nThis may take a minute based on your connection speed.")
-	download := exec.Command(
-		"curl",
-		"-o",
-		customDLL,
-		"-L",
-		downloadLink)
-	_, err := download.Output()
-
-	if err != nil {
-		_ = fmt.Errorf("something happened %s", err)
-	}
-}
-
-func checkDlssVersion(location string) string {
-
-	loca := strings.ReplaceAll(location, "\\", "\\\\")
-	trying := loca + "\\\\nvngx_dlss.dll"
-
-	//location will be path of file
-	//checkVersion, err := exec.Command(
-	//	"wmic",
-	//	"datafile",
-	//	"where",
-	//	"name="+"\""+trying+"\"",
-	//	"get",
-	//	"Version",
-	//	"/value").CombinedOutput()
-	////version, err := checkVersion.Output()
-	//
-	////fmt.Println(string(version), checkVersion, err)
-	//fmt.Println(string(checkVersion))
-	//if err != nil {
-	//	fmt.Errorf("something happened %s", err)
-	//}
-
-	cmd := exec.Command("wmic")
-	cmdLine := "datafile where name=" + "\"" + trying + "\"" + " get Version /value"
-	cmd.SysProcAttr = &syscall.SysProcAttr{CmdLine: "/c " + os.ExpandEnv(cmdLine)}
-	out, err := cmd.CombinedOutput()
-
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	version := strings.Split(string(out), "=")[1]
-	version = strings.TrimSpace(version)
-	version = version[:len(version)-2]
-	fmt.Println(version)
-
-	return version
 }
