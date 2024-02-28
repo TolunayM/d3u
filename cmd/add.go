@@ -8,11 +8,11 @@ import (
 	"path/filepath"
 )
 
-// addgameCmd represents the addgame command
-var addgameCmd = &cobra.Command{
-	Use:   "addgame",
-	Short: "Adding games directories",
-	Long:  `This for adding your games directories for updating dlss`,
+// addCmd represents the add command
+var addCmd = &cobra.Command{
+	Use:   "add",
+	Short: "Adding games' directories",
+	Long:  `This for adding your games' directories for updating dlss`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		file, err := dialog.File().Filter(".exe", "exe").Title("Select a file").Load()
@@ -36,5 +36,5 @@ var addgameCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(addgameCmd)
+	rootCmd.AddCommand(addCmd)
 }

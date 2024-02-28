@@ -1,6 +1,3 @@
-/*
-Copyright © 2024 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -8,9 +5,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// getgamesCmd represents the getgames command
-var getgamesCmd = &cobra.Command{
-	Use:   "getgames",
+// getCmd represents the get command
+var getCmd = &cobra.Command{
+	Use:   "get",
 	Short: "List games",
 	Long:  `List all games with their location info`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -19,5 +16,5 @@ var getgamesCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(getgamesCmd)
+	rootCmd.AddCommand(getCmd)
 }
