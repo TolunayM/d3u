@@ -1,6 +1,3 @@
-/*
-Copyright © 2024 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -10,6 +7,8 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strings"
+	"syscall"
 )
 
 // updateCmd represents the update command
@@ -57,10 +56,15 @@ var updateCmd = &cobra.Command{
 			if len(args) != 0 {
 				for cursor := 0; cursor < len(args); cursor++ {
 					if string(b.Get([]byte(args[cursor]))) != "" {
-						err = os.WriteFile(string(b.Get([]byte(args[cursor])))+"\\nvngx_dlss.dll", file, 0644)
-						fmt.Println(args[cursor] + " Updated to " + version + " Successfully")
+						if checkDlssVersion(string(b.Get([]byte(args[cursor])))) != version {
+							err = os.WriteFile(string(b.Get([]byte(args[cursor])))+"\\nvngx_dlss.dll", file, 0644)
+							fmt.Println(args[cursor] + " Updated to " + version + " Successfully")
+						} else {
+							fmt.Println("Same version no need to update")
+						}
+
 					} else {
-						fmt.Println("Game is not present check your typo or use getgames command for listing games added to database")
+						fmt.Println("Game is not present in db check your typo or use get command for listing games added to database")
 					}
 
 				}
@@ -88,8 +92,6 @@ var updateCmd = &cobra.Command{
 func init() {
 
 	updateCmd.Flags().StringP("version", "v", "latest", "Version specifier")
-	//updateCmd.Flags().StringP("game", "g", "", "Game selection for updating specific games")
-
 	rootCmd.AddCommand(updateCmd)
 }
 
@@ -110,5 +112,43 @@ func downloadDLSS(version string) {
 	if err != nil {
 		_ = fmt.Errorf("something happened %s", err)
 	}
+}
 
+func checkDlssVersion(location string) string {
+
+	loca := strings.ReplaceAll(location, "\\", "\\\\")
+	trying := loca + "\\\\nvngx_dlss.dll"
+
+	//location will be path of file
+	//checkVersion, err := exec.Command(
+	//	"wmic",
+	//	"datafile",
+	//	"where",
+	//	"name="+"\""+trying+"\"",
+	//	"get",
+	//	"Version",
+	//	"/value").CombinedOutput()
+	////version, err := checkVersion.Output()
+	//
+	////fmt.Println(string(version), checkVersion, err)
+	//fmt.Println(string(checkVersion))
+	//if err != nil {
+	//	fmt.Errorf("something happened %s", err)
+	//}
+
+	cmd := exec.Command("wmic")
+	cmdLine := "datafile where name=" + "\"" + trying + "\"" + " get Version /value"
+	cmd.SysProcAttr = &syscall.SysProcAttr{CmdLine: "/c " + os.ExpandEnv(cmdLine)}
+	out, err := cmd.CombinedOutput()
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	version := strings.Split(string(out), "=")[1]
+	version = strings.TrimSpace(version)
+	version = version[:len(version)-2]
+	fmt.Println(version)
+
+	return version
 }
