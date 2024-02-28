@@ -56,3 +56,29 @@ func GetGames() {
 		return nil
 	})
 }
+
+func RemoveLocation(removedData string) {
+
+	//open db connection
+	db, err := bolt.Open(d3uHomeDB+"\\my.bboltconnection", 0600, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	err = db.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("MyBucket"))
+
+		if b.Get([]byte(removedData)) != nil {
+			_ = b.Delete([]byte(removedData))
+			fmt.Println(removedData + " Removed Succesfully")
+		} else {
+			fmt.Println("Game is not present in db check your typo or use get command for listing games added to database")
+		}
+
+		return err
+	})
+	if err != nil {
+		return
+	}
+}
