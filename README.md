@@ -3,7 +3,7 @@
   <br>
   <a href="https://github.com/TolunayM/dlss-updater"><img src="img/logo.png" alt="WhatsInit" width="500"></a>
   <br>
-    WhatsInit
+    d3u
   <br>
 </h1>
 
