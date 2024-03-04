@@ -11,6 +11,7 @@ func main() {
 	var home, _ = os.UserHomeDir()
 	d3uHomeDB := home + "\\d3u\\db"
 	d3uHomeDLSS := home + "\\d3u\\dlss"
+
 	if _, err := os.Stat(d3uHomeDB); os.IsNotExist(err) {
 		err := os.Mkdir(d3uHomeDB, os.ModeDir)
 		if err != nil {
