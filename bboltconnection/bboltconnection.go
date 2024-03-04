@@ -52,7 +52,7 @@ func GetGames() {
 
 		for key, value := c.First(); key != nil; key, value = c.Next() {
 
-			fmt.Printf("Game = %s, location = %s dlss version = %s\n", string(key), string(value), tools.CheckDlssVersion(string(b.Get(key))))
+			fmt.Printf("Game = %s, Directory = %s Current DLSS version = %s\n", string(key), string(value), tools.CheckDlssVersion(string(b.Get(key))))
 		}
 		return nil
 	})

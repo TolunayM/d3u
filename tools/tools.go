@@ -9,7 +9,6 @@ import (
 )
 
 var home, _ = os.UserHomeDir()
-var d3uHomeDB = home + "\\d3u\\db"
 var d3uHomeDLSS = home + "\\d3u\\dlss"
 
 func DownloadDLSS(version string) {
@@ -36,23 +35,6 @@ func CheckDlssVersion(location string) string {
 	loca := strings.ReplaceAll(location, "\\", "\\\\")
 	trying := loca + "\\\\nvngx_dlss.dll"
 
-	//location will be path of file
-	//checkVersion, err := exec.Command(
-	//	"wmic",
-	//	"datafile",
-	//	"where",
-	//	"name="+"\""+trying+"\"",
-	//	"get",
-	//	"Version",
-	//	"/value").CombinedOutput()
-	////version, err := checkVersion.Output()
-	//
-	////fmt.Println(string(version), checkVersion, err)
-	//fmt.Println(string(checkVersion))
-	//if err != nil {
-	//	fmt.Errorf("something happened %s", err)
-	//}
-
 	cmd := exec.Command("wmic")
 	cmdLine := "datafile where name=" + "\"" + trying + "\"" + " get Version /value"
 	cmd.SysProcAttr = &syscall.SysProcAttr{CmdLine: "/c " + os.ExpandEnv(cmdLine)}
@@ -65,7 +47,6 @@ func CheckDlssVersion(location string) string {
 	version := strings.Split(string(out), "=")[1]
 	version = strings.TrimSpace(version)
 	version = version[:len(version)-2]
-	//fmt.Println(version)
 
 	return version
 }
