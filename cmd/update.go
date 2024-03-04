@@ -35,7 +35,7 @@ And you can use for updating multiple games' at once.
 
 			d3u update Cyberpunk2077 "The Last of Us" "Diablo IV"
 
-After that you can specifie your DLSS version with -version or -v flag default is latest DLSS version.
+After that you can specify your DLSS version with -version or -v flag default is latest DLSS version.
 Example:
 
 			d3u update Cyberpunk2077 -v "3.5.0" or d3u update Cyberpunk2077 -v 3.5.0
