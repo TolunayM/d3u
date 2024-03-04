@@ -11,8 +11,9 @@ import (
 // addCmd represents the add command
 var addCmd = &cobra.Command{
 	Use:   "add",
-	Short: "Adding games' directories",
-	Long:  `This for adding your games' directories for updating dlss`,
+	Short: "Adding games' directories to database",
+	Long: `You need to select game's or application's executable (.exe) file to save directory to database. 
+This doesn't alter executables just saves executables directory for upgrading or downgrading to DLSS files.`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		file, err := dialog.File().Filter(".exe", "exe").Title("Select a file").Load()
@@ -31,7 +32,7 @@ var addCmd = &cobra.Command{
 		gameName := filepath.Base(absolutePath)
 		gameName = gameName[0 : len(gameName)-4]
 		bboltconnection.Addgame(gameName, gameDirectory)
-		fmt.Println("Game directory added to bboltconnection", gameDirectory, gameName)
+		fmt.Println("Game directory added to database", gameDirectory, gameName)
 	},
 }
 

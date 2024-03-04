@@ -9,8 +9,10 @@ import (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "dlss",
-	Short: "A brief description of your application",
-	Long:  `This is dlss updaaaaaaaaaaaaaaaaaaaaater`,
+	Short: "Dlss upgrade and downgrade tool",
+	Long: `Dlss upgrade and downgrade tool. 
+			
+				Created by https://github.com/TolunayM`,
 }
 
 func Execute() {

@@ -16,8 +16,32 @@ var d3uHomeDB = home + "\\d3u\\db"
 var d3uHomeDLSS = home + "\\d3u\\dlss"
 var updateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "A brief description of your command",
-	Long:  `Update dlss`,
+	Short: "Upgrade or downgrade your dlss versions.",
+	Long: `Upgrade or downgrade your dlss versions.
+You can type game's name right after update command 
+Example:
+
+			d3u update Cyberpunk2077
+
+but i suggest you to using double quotes because some games has spaces in their name.
+
+For example when you use update command with game like "The Last of Us", commandline thinks every word is a different game.
+You can just use double quotes like
+
+			d3u update "The Last of Us"
+
+Actually Tlou has an exe like tlou-i.exe but you got the concept.
+And you can use for updating multiple games' at once.
+
+			d3u update Cyberpunk2077 "The Last of Us" "Diablo IV"
+
+After that you can specifie your DLSS version with -version or -v flag default is latest DLSS version.
+Example:
+
+			d3u update Cyberpunk2077 -v "3.5.0" or d3u update Cyberpunk2077 -v 3.5.0
+
+just be sure you typed correct version of a DLSS. After that it will automatically checks current DLSS version and it'll decide to upgrade or downgrade.
+`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		version, _ := cmd.Flags().GetString("version")
@@ -25,9 +49,9 @@ var updateCmd = &cobra.Command{
 
 		/*
 			this flag was used for get the games that wanted to be updated
-			but after thinking about that I decide to change
+			but after thinking about that I decide to change.
 			on cobra-cli all commands actually flags of root command
-			and that means you can already have parse flag as named "args"
+			and that means you can already have parse flag as named "args".
 			this way is better for "command line philosophy"
 		*/
 		//gameSelection := cmd.Flags().Parse("game")
