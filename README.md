@@ -12,7 +12,7 @@
 
 Dlss-updater is a small command-line tool that allows you to manage your DLSS files.
 
-#TLDR
+# TLDR
 Throw your games' executable paths to database and upgrade or downgrade DLSS versions from commandline.
 
 # How To Install
