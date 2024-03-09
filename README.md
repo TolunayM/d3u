@@ -3,7 +3,7 @@
   <br>
   <a href="https://github.com/TolunayM/dlss-updater"><img src="img/logo.png" alt="WhatsInit" width="500"></a>
   <br>
-    WhatsInit
+    d3u
   <br>
 </h1>
 
@@ -12,7 +12,8 @@
 
 Dlss-updater is a small command-line tool that allows you to manage your DLSS files.
 
-
+# TLDR
+Throw your games' executable paths to database and upgrade or downgrade DLSS versions from commandline.
 
 # How To Install
 There are two ways to install d3u to your system.
