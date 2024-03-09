@@ -65,10 +65,11 @@ just be sure you typed correct version of a DLSS. After that it will automatical
 		// check before download if requested dlss file is downloaded before
 		file, err := os.ReadFile(customDLL)
 		if err != nil {
-			fmt.Println("Dlss files is not present locally download starting...")
+			fmt.Println("Dlss file is not present locally download starting...")
 			tools.DownloadDLSS(version)
 			file, _ = os.ReadFile(customDLL)
 		}
+
 		// updating
 		db.View(func(tx *bolt.Tx) error {
 			b := tx.Bucket([]byte("MyBucket"))
@@ -81,11 +82,11 @@ just be sure you typed correct version of a DLSS. After that it will automatical
 							err = os.WriteFile(string(b.Get([]byte(args[cursor])))+"\\nvngx_dlss.dll", file, 0644)
 							fmt.Println(args[cursor] + " Updated to " + version + " Successfully")
 						} else {
-							fmt.Println("Same version no need to update")
+							fmt.Println(string(b.Get([]byte(args[cursor]))) + "already has " + version + " no need to update")
 						}
 
 					} else {
-						fmt.Println("Game is not present in db check your typo or use get command for listing games added to database")
+						fmt.Println("Game is not present in db check your typo or use get command for listing games on database")
 					}
 
 				}
